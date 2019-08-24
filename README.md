@@ -8,7 +8,7 @@ Para executar o projeto, é necessário ter configurado o ambiente com:
 No terminal executar:
 > $ git clone https://github.com/calebesouza/APIRestTexoit.git
 
-No Eclipse ir em Filme -> Import -> Projects from Folder or Archive. Selecionar o diretório que o clone do projeto foi baixado e clicar em Finish.
+No Eclipse ir em File -> Import -> Projects from Folder or Archive. Selecionar o diretório que o clone do projeto foi baixado e clicar em Finish.
 
 Aguardar o Eclipse baixar as dependências do projeto.
 
