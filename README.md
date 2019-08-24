@@ -12,8 +12,8 @@ No Eclipse ir em Filme -> Import -> Projects from Folder or Archive. Selecionar 
 
 Aguardar o Eclipse baixar as dependências do projeto.
 
-Para rodar o projeto pelo eclipse, apertar com o botão direito do mouse no arquivo: src/main/java/br.com.calebe/Main.java
-> Run As -> Java Application
+Para rodar o projeto pelo eclipse, apertar com o botão direito do mouse no arquivo: **src/main/java/br.com.calebe/Main.java
+> Run As -> Java Application**
 
 No navegador web, executar as urls abaixo para:
   
@@ -27,5 +27,5 @@ No navegador web, executar as urls abaixo para:
   > 127.0.0.1:8080/doisPremiosMaisRapido
   
 Para rodar os testes, o projeto tem que estar em execução. 
-Clicar com o botão direito do mouse no arquivo: src/test/java/br.com.calebe.testesFilmeService/TesteAPI.java   
+Clicar com o botão direito do mouse no arquivo: **src/test/java/br.com.calebe.testesFilmeService/TesteAPI.java**   
 > Run As -> JUnit Test
