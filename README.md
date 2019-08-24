@@ -12,8 +12,8 @@ No Eclipse ir em Filme -> Import -> Projects from Folder or Archive. Selecionar 
 
 Aguardar o Eclipse baixar as dependências do projeto.
 
-Para rodar o projeto pelo eclipse, apertar com o botão direito do mouse no arquivo: **src/main/java/br.com.calebe/Main.java
-> Run As -> Java Application**
+Para rodar o projeto pelo eclipse, apertar com o botão direito do mouse no arquivo: **src/main/java/br.com.calebe/Main.java**
+> Run As -> Java Application
 
 No navegador web, executar as urls abaixo para:
   
