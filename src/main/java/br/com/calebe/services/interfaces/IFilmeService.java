@@ -3,7 +3,7 @@ package br.com.calebe.services.interfaces;
 import java.util.List;
 
 import br.com.calebe.dto.FilmeDTO;
-import br.com.calebe.dto.IntervaloPremiosDTO;
+import br.com.calebe.dto.IntervalosDTO;
 
 public interface IFilmeService {
 	
@@ -19,22 +19,11 @@ public interface IFilmeService {
 	public void cadastrar( List<FilmeDTO> filmes );
 	
 	/**
-	 * Verifica se possui registro na tabela pelo id
-	 * @return boolean
+	 * Retorna DTO com o produtor que teve o maior intervalo entre 2 premios e 
+	 * o produtor que teve dois premios mais rapidos
+	 * @return IntervalosDTO
 	 */
-	public boolean possuiRegistroPorId(Long id);
-	
-	/**
-	 * Retorna DTO com o produtor que teve o maior intervalo entre 2 premios
-	 * @return IntervaloPremiosDTO
-	 */
-	public IntervaloPremiosDTO buscarProdutorMaiorIntervaloPremios();
-	
-	/**
-	 * Retorna DTO com o produtor que teve dois premios mais rapidos
-	 * @return IntervaloPremiosDTO
-	 */
-	public IntervaloPremiosDTO buscarProdutorDoisPremiosMaisRapido();
+	public IntervalosDTO buscarIntervaloPremios();
 	
 	/**
 	 * Popula a tabela de filmes
@@ -45,5 +34,5 @@ public interface IFilmeService {
 	 * Limpa a tabela de filmes
 	 */
 	public void limparTabela();
-	
+
 }

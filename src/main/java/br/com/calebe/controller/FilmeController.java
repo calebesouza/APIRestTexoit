@@ -10,7 +10,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
 import br.com.calebe.dto.FilmeDTO;
-import br.com.calebe.dto.IntervaloPremiosDTO;
+import br.com.calebe.dto.IntervalosDTO;
 import br.com.calebe.services.FilmeService;
 
 @RestController
@@ -30,15 +30,9 @@ public class FilmeController {
 		return ResponseEntity.status(HttpStatus.OK).body(filmes);
 	}
 	
-	@RequestMapping(value = "/maiorIntervaloDePremios", method = RequestMethod.GET)
-	public ResponseEntity<IntervaloPremiosDTO> maiorIntervaloDePremios() {
-		IntervaloPremiosDTO intervaloPremiosDTO = filmeService.buscarProdutorMaiorIntervaloPremios();
-		return ResponseEntity.status(HttpStatus.OK).body(intervaloPremiosDTO);
-	}
-	
-	@RequestMapping(value = "/doisPremiosMaisRapido", method = RequestMethod.GET)
-	public ResponseEntity<IntervaloPremiosDTO> doisPremiosMaisRapido() {
-		IntervaloPremiosDTO intervaloPremiosDTO = filmeService.buscarProdutorDoisPremiosMaisRapido();
+	@RequestMapping(value = "/intervaloPremios", method = RequestMethod.GET)
+	public ResponseEntity<IntervalosDTO> intervaloDePremios() {
+		IntervalosDTO intervaloPremiosDTO = filmeService.buscarIntervaloPremios();
 		return ResponseEntity.status(HttpStatus.OK).body(intervaloPremiosDTO);
 	}
 	

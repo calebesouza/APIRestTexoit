@@ -110,12 +110,12 @@ public class TesteAPI {
 	
 	// verificando se o link para buscar o produtor com maior intervalo de premios é valida
 	@Test
-	public void maiorIntervaloDePremiosIsValid() {
+	public void intervaloDePremiosIsValid() {
     	
 		RestAssured.
     	given().
     	when().
-            get(uri+"/maiorIntervaloDePremios").
+            get(uri+"/intervaloPremios").
         then().
             assertThat().
             statusCode(200);
@@ -124,12 +124,12 @@ public class TesteAPI {
 	
 	// verificando se o link para buscar o produtor com maior intervalo de premios retorna um JSON
 	@Test
-	public void maiorIntervaloDePremiosReturnsJSON() {
+	public void intervaloDePremiosReturnsJSON() {
     	
 		RestAssured.
     	given().
     	when().
-            get(uri+"/maiorIntervaloDePremios").
+            get(uri+"/intervaloPremios").
         then().
             contentType(ContentType.JSON);
     	
@@ -143,40 +143,13 @@ public class TesteAPI {
 		given().
 	        expect().
 	        statusCode(200).
-	        body("producer", Matchers.equalTo("Produtor5")).
-	        body("interval", Matchers.equalTo(6)).
-	        body("previousWin", Matchers.equalTo("1986")).
-	        body("followingWin", Matchers.equalTo("1992")).
+	        body("max.producer", Matchers.equalTo("Produtor5")).
+	        body("max.interval", Matchers.equalTo(6)).
+	        body("max.previousWin", Matchers.equalTo("1986")).
+	        body("max.followingWin", Matchers.equalTo("1992")).
 	    when().
-	        get(uri+"/maiorIntervaloDePremios");
+	        get(uri+"/intervaloPremios");
 		
-	}
-	
-	// verificando se o link para buscar o produtor que conseguiu 2 premios mais rapido é valida
-	@Test
-	public void doisPremiosMaisRapidoIsValid() {
-    	
-		RestAssured.
-    	given().
-    	when().
-            get(uri+"/doisPremiosMaisRapido").
-        then().
-            assertThat().
-            statusCode(200);
-    	
-	}
-	
-	// verificando se o link para buscar o produtor que conseguiu 2 premios mais rapido retorna um JSON
-	@Test
-	public void doisPremiosMaisRapidoReturnsJSON() {
-    	
-		RestAssured.
-    	given().
-    	when().
-            get(uri+"/doisPremiosMaisRapido").
-        then().
-            contentType(ContentType.JSON);
-    	
 	}
 	
 	// verificando se o link para buscar o produtor que conseguiu 2 premios mais rapido retorna valor correto
@@ -187,12 +160,12 @@ public class TesteAPI {
 		given().
 	        expect().
 	        statusCode(200).
-	        body("producer", Matchers.equalTo("Produtor1")).
-	        body("interval", Matchers.equalTo(3)).
-	        body("previousWin", Matchers.equalTo("1980")).
-	        body("followingWin", Matchers.equalTo("1983")).
+	        body("min.producer", Matchers.equalTo("Produtor1")).
+	        body("min.interval", Matchers.equalTo(3)).
+	        body("min.previousWin", Matchers.equalTo("1980")).
+	        body("min.followingWin", Matchers.equalTo("1983")).
 	    when().
-	        get(uri+"/doisPremiosMaisRapido");
+	        get(uri+"/intervaloPremios");
 		
 	}
 	

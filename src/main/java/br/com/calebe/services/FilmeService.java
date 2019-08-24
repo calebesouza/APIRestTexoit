@@ -15,6 +15,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import br.com.calebe.dto.FilmeDTO;
 import br.com.calebe.dto.IntervaloPremiosDTO;
+import br.com.calebe.dto.IntervalosDTO;
 import br.com.calebe.entities.Filme;
 import br.com.calebe.repositories.interfaces.FilmeRepository;
 import br.com.calebe.services.interfaces.IFilmeService;
@@ -69,33 +70,33 @@ public class FilmeService implements IFilmeService {
 	}
 	
 	@Override
-	public boolean possuiRegistroPorId(Long id) {
-		Filme filme = filmeRepository.getOne(id);
-		return (filme != null);
-	}
-
-	@Override
-	public IntervaloPremiosDTO buscarProdutorMaiorIntervaloPremios() {
-		List<IntervaloPremiosDTO> intervalosDTO = montarListaIntervalos();
-		if ( intervalosDTO.isEmpty() ) {
-			return new IntervaloPremiosDTO();
-		}
-		Collections.sort(intervalosDTO);
-		return intervalosDTO.get(intervalosDTO.size()-1);
+	public IntervalosDTO buscarIntervaloPremios(){
+		IntervalosDTO intervalosDTO = new IntervalosDTO();
+		List<IntervaloPremiosDTO> intervaloPremiosDTO = montarListaIntervalos();
+		intervalosDTO.setMax(this.buscarProdutorMaiorIntervaloPremios(intervaloPremiosDTO)); 
+		intervalosDTO.setMin(this.buscarProdutorDoisPremiosMaisRapido(intervaloPremiosDTO));
+		return intervalosDTO;
 	}
 	
-	@Override
-	public IntervaloPremiosDTO buscarProdutorDoisPremiosMaisRapido() {
+	private IntervaloPremiosDTO buscarProdutorMaiorIntervaloPremios( List<IntervaloPremiosDTO> intervaloPremiosDTO ) {
+		if ( intervaloPremiosDTO.isEmpty() ) {
+			return new IntervaloPremiosDTO();
+		}
+		Collections.sort(intervaloPremiosDTO);
+		return intervaloPremiosDTO.get(intervaloPremiosDTO.size()-1);
+	}
+	
+	private IntervaloPremiosDTO buscarProdutorDoisPremiosMaisRapido( List<IntervaloPremiosDTO> intervaloPremiosDTO ) {
 		List<IntervaloPremiosDTO> intervalosDTO = montarListaIntervalos();
 		if ( intervalosDTO.isEmpty() ) {
 			return new IntervaloPremiosDTO();
 		}
 		Collections.sort(intervalosDTO);
-		for (IntervaloPremiosDTO intervaloPremiosDTO : intervalosDTO) {
-			if ( intervaloPremiosDTO.getInterval() == 0 ) {
+		for (IntervaloPremiosDTO ipDTO : intervalosDTO) {
+			if ( ipDTO.getInterval() == 0 ) {
 				continue;
 			}
-			return intervaloPremiosDTO;
+			return ipDTO;
 		}
 		return new IntervaloPremiosDTO();
 	}
