@@ -139,11 +139,12 @@ public class FilmeService implements IFilmeService {
 				IntervaloPremiosDTO intervalo = new IntervaloPremiosDTO();
 				intervalo.setProducer(filme.getProdutor());
 				if ( intervalosPremiosDTO.contains(intervalo) ) {
-					int index = intervalosPremiosDTO.indexOf(intervalo);
-					if ( filme.getVencedor() ) {
-						intervalosPremiosDTO.get(index).setFollowingWin(filme.getAno());
-						intervalosPremiosDTO.get(index).setInterval( this.calcularIntervalo(intervalosPremiosDTO.get(index)) );
+					if ( !filme.getVencedor() ) {
+						continue;
 					}
+					int index = intervalosPremiosDTO.indexOf(intervalo);
+					intervalosPremiosDTO.get(index).setFollowingWin(filme.getAno());
+					intervalosPremiosDTO.get(index).setInterval( this.calcularIntervalo(intervalosPremiosDTO.get(index)) );
 				} else {
 					IntervaloPremiosDTO novoIntervalo = new IntervaloPremiosDTO();
 					novoIntervalo.setPreviousWin(filme.getAno());
