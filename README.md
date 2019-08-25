@@ -10,7 +10,7 @@ No terminal executar:
 
 No Eclipse, ir em File -> Import -> Projects from Folder or Archive. Selecionar o diretório que o clone do projeto foi baixado e clicar em Finish.
 
-Ainda no eclipse, apertar com o botão direito no projeto "Maven -> Build project" e aguardar baixar as dependências do projeto.
+Ainda no eclipse, apertar com o botão direito no projeto "Maven -> Download Sources" e aguardar baixar as dependências do projeto.
 
 Para rodar o projeto pelo eclipse, apertar com o botão direito do mouse no arquivo: **src/main/java/br.com.calebe/Main.java**
 > Run As -> Java Application
