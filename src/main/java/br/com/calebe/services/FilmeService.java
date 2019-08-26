@@ -44,10 +44,7 @@ public class FilmeService implements IFilmeService {
 	public List<FilmeDTO> listar() {
 		List<FilmeDTO> filmesDTO = new ArrayList<>();
 		try {
-			List<Filme> filmes = filmeRepository.findAll();
-			if ( filmes.size() == 0 ) {
-				return filmesDTO;
-			}
+			List<Filme> filmes = this.getFilmes();
 			for (Filme filme : filmes) {
 				filmesDTO.add(new FilmeDTO(filme));
 			}
@@ -55,6 +52,14 @@ public class FilmeService implements IFilmeService {
 		} catch ( Exception e ) {
 			return filmesDTO;
 		}
+	}
+	
+	private List<Filme> getFilmes(){
+		List<Filme> filmes = filmeRepository.findAll();
+		if ( filmes.size() == 0 ) {
+			return new ArrayList<>();
+		}
+		return filmes;
 	}
 	
 	@Override
@@ -72,33 +77,87 @@ public class FilmeService implements IFilmeService {
 	@Override
 	public IntervalosDTO buscarIntervaloPremios(){
 		IntervalosDTO intervalosDTO = new IntervalosDTO();
-		List<IntervaloPremiosDTO> intervaloPremiosDTO = montarListaIntervalos();
-		intervalosDTO.setMax(this.buscarProdutorMaiorIntervaloPremios(intervaloPremiosDTO)); 
-		intervalosDTO.setMin(this.buscarProdutorDoisPremiosMaisRapido(intervaloPremiosDTO));
+		intervalosDTO.setMin(this.buscarProdutorDoisPremiosMaisRapido());
+		intervalosDTO.setMax(this.buscarProdutorMaiorIntervaloPremios()); 
 		return intervalosDTO;
 	}
 	
-	private IntervaloPremiosDTO buscarProdutorMaiorIntervaloPremios( List<IntervaloPremiosDTO> intervaloPremiosDTO ) {
-		if ( intervaloPremiosDTO.isEmpty() ) {
+	private IntervaloPremiosDTO buscarProdutorMaiorIntervaloPremios() {
+		List<IntervaloPremiosDTO> intervalosDTO = new ArrayList<>();
+		try {
+			List<Filme> filmes = this.getFilmes();
+			if ( filmes.size() == 0 ) {
+				return new IntervaloPremiosDTO();
+			}
+			for (Filme filme : filmes) {
+				if ( !filme.getVencedor() ) {
+					continue;
+				}
+				IntervaloPremiosDTO intervalo = new IntervaloPremiosDTO();
+				for (String produtor : this.getProdutores(filme)) {
+					intervalo.setProducer(produtor);
+					if ( intervalosDTO.contains(intervalo) ) {
+						int index = intervalosDTO.indexOf(intervalo);
+						intervalosDTO.get(index).setFollowingWin(filme.getAno());
+						intervalosDTO.get(index).setInterval( this.calcularIntervalo(intervalosDTO.get(index)) );
+					} else {
+						IntervaloPremiosDTO novoIntervalo = new IntervaloPremiosDTO();
+						novoIntervalo.setPreviousWin(filme.getAno());
+						novoIntervalo.setFollowingWin(filme.getAno());
+						novoIntervalo.setInterval(0);
+						novoIntervalo.setProducer(produtor);
+						intervalosDTO.add(novoIntervalo);
+					}
+				}
+			}
+			Collections.sort(intervalosDTO);
+			return intervalosDTO.get(intervalosDTO.size()-1);
+		} catch ( Exception e ) {
 			return new IntervaloPremiosDTO();
 		}
-		Collections.sort(intervaloPremiosDTO);
-		return intervaloPremiosDTO.get(intervaloPremiosDTO.size()-1);
 	}
 	
-	private IntervaloPremiosDTO buscarProdutorDoisPremiosMaisRapido( List<IntervaloPremiosDTO> intervaloPremiosDTO ) {
-		List<IntervaloPremiosDTO> intervalosDTO = montarListaIntervalos();
-		if ( intervalosDTO.isEmpty() ) {
+	private IntervaloPremiosDTO buscarProdutorDoisPremiosMaisRapido() {
+		List<IntervaloPremiosDTO> intervalosDTO = new ArrayList<>();
+		try {
+			List<Filme> filmes = this.getFilmes();
+			if ( filmes.size() == 0 ) {
+				return new IntervaloPremiosDTO();
+			}
+			for (Filme filme : filmes) {
+				if ( !filme.getVencedor() ) {
+					continue;
+				}
+				IntervaloPremiosDTO intervalo = new IntervaloPremiosDTO();
+				for (String produtor : this.getProdutores(filme)) {
+					intervalo.setProducer(produtor);
+					int index = intervalosDTO.indexOf(intervalo);
+					if ( intervalosDTO.contains(intervalo) ) {
+						if ( !intervalosDTO.get(index).getFollowingWin().equals(intervalosDTO.get(index).getPreviousWin()) ) {
+							continue;
+						}
+						intervalosDTO.get(index).setFollowingWin(filme.getAno());
+						intervalosDTO.get(index).setInterval(this.calcularIntervalo(intervalosDTO.get(index)));
+					} else {
+						IntervaloPremiosDTO novoIntervalo = new IntervaloPremiosDTO();
+						novoIntervalo.setPreviousWin(filme.getAno());
+						novoIntervalo.setFollowingWin(filme.getAno());
+						novoIntervalo.setInterval(0);
+						novoIntervalo.setProducer(produtor);
+						intervalosDTO.add(novoIntervalo);
+					}
+				}
+			}
+			Collections.sort(intervalosDTO);
+			for (IntervaloPremiosDTO intervalo : intervalosDTO) {
+				if (intervalo.getInterval() != 0 ) {
+					return intervalo;
+				}
+			}
+			return intervalosDTO.get(0);
+		} catch ( Exception e ) {
 			return new IntervaloPremiosDTO();
 		}
-		Collections.sort(intervalosDTO);
-		for (IntervaloPremiosDTO ipDTO : intervalosDTO) {
-			if ( ipDTO.getInterval() == 0 ) {
-				continue;
-			}
-			return ipDTO;
-		}
-		return new IntervaloPremiosDTO();
 	}
 	
 	@Override
@@ -128,36 +187,23 @@ public class FilmeService implements IFilmeService {
 		return filmes;
 	}
 	
-	private List<IntervaloPremiosDTO> montarListaIntervalos() {
-		List<IntervaloPremiosDTO> intervalosPremiosDTO = new ArrayList<>();
-		try {
-			List<Filme> filmes = filmeRepository.findAll();
-			if ( filmes.size() == 0 ) {
-				return intervalosPremiosDTO;
-			}
-			for (Filme filme : filmes) {
-				IntervaloPremiosDTO intervalo = new IntervaloPremiosDTO();
-				intervalo.setProducer(filme.getProdutor());
-				if ( intervalosPremiosDTO.contains(intervalo) ) {
-					if ( !filme.getVencedor() ) {
-						continue;
-					}
-					int index = intervalosPremiosDTO.indexOf(intervalo);
-					intervalosPremiosDTO.get(index).setFollowingWin(filme.getAno());
-					intervalosPremiosDTO.get(index).setInterval( this.calcularIntervalo(intervalosPremiosDTO.get(index)) );
-				} else {
-					IntervaloPremiosDTO novoIntervalo = new IntervaloPremiosDTO();
-					novoIntervalo.setPreviousWin(filme.getAno());
-					novoIntervalo.setFollowingWin(filme.getAno());
-					novoIntervalo.setInterval(0);
-					novoIntervalo.setProducer(filme.getProdutor());
-					intervalosPremiosDTO.add(novoIntervalo);
-				}
-			}
-			return intervalosPremiosDTO;
-		} catch ( Exception e ) {
-			return intervalosPremiosDTO;
+	private List<String> getProdutores(Filme filme) {
+		List<String> nomes = new ArrayList<>();
+		if ( !filme.getProdutor().toLowerCase().contains(" and ".toLowerCase()) ) {
+			nomes.add(filme.getProdutor());
+			return nomes;
 		}
+		String[] produtoresSepAnd = filme.getProdutor().split(" and ");
+		nomes.add(produtoresSepAnd[1]);
+		if ( !produtoresSepAnd[0].toLowerCase().contains(", ".toLowerCase()) ) {
+			nomes.add(produtoresSepAnd[0]);
+			return nomes;
+		}
+		String[] produtoresSepVirgula = produtoresSepAnd[0].split(", ");
+		for (String nome : produtoresSepVirgula) {
+			nomes.add(nome);
+		}
+		return nomes;
 	}
 	
 	private int calcularIntervalo(IntervaloPremiosDTO intervaloPremiosDTO) {
