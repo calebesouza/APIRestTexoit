@@ -20,11 +20,8 @@ No navegador web, executar as urls abaixo para:
   - retornar a lista de filmes
   > 127.0.0.1:8080/filmes
   
-  - retornar o produtor com maior intervalo entre dois prêmios
-  > 127.0.0.1:8080/maiorIntervaloDePremios
-  
-  - retornar o produtor que obteve dois prêmios mais ráṕido
-  > 127.0.0.1:8080/doisPremiosMaisRapido
+  - retornar o produtor com maior intervalo entre dois prêmios e o que obteve dois prêmios mais ráṕido
+  > 127.0.0.1:8080/intervaloPremios
   
 Para rodar os testes, o projeto tem que estar em execução. 
 Clicar com o botão direito do mouse no arquivo: **src/test/java/br.com.calebe.testesFilmeService/TesteAPI.java**   
