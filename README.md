@@ -1,7 +1,7 @@
 # APIRestTexoit
 
 Para executar o projeto, é necessário ter configurado o ambiente com:
-  - Java JDK 7+
+  - Java JDK 8+
   - IDE Eclipse
   - Maven
   
